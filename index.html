@@ -61,8 +61,7 @@
   <div id="message" class="message"></div>
   <div class="board" id="idioms"></div>
   <div class="board" id="images"></div>
-  <div class="controls" id="controls"></div>
-  <img id="trophy" src="images/trophy.png" alt="Trophy" width="200">  <script>
+  <div class="controls" id="controls"></div>  <script>
     const levelData = [
       [
         { text: "畫蛇添足", image: "Snake.png" },
@@ -152,6 +151,7 @@
       level = 1;
       loadLevel();
     };
+    controls.innerHTML = "";
     controls.appendChild(btn);
   } else {
     messageDisplay.innerHTML = "你太叻啦！全部完成晒啦！<br><img src='images/trophy.png' width='180'>";
@@ -174,8 +174,11 @@
       messageDisplay.innerText = "感謝遊玩！";
     };
 
+    controls.innerHTML = "";
     controls.appendChild(restartBtn);
     controls.appendChild(endBtn);
+  }
+}
   }
 }
   }
