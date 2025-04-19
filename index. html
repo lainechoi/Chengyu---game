@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>成語配對遊戲</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #fff8f0;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #ff6f61;
+    }
+    .score, .message, .controls {
+      font-size: 18px;
+      margin: 10px;
+    }
+    .board {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .card {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      width: 120px;
+      height: 120px;
+      background-color: #fff;
+      box-shadow: 2px 2px 5px #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .card.selected {
+      border-color: #ff6f61;
+      box-shadow: 0 0 10px #ff6f61;
+    }
+    img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>成語配對遊戲</h1>
+  <div class="score">分數：<span id="score">0</span></div>
+  <div id="message" class="message"></div>
+  <div class="board" id="idioms"></div>
+  <div class="board" id="images"></div>
+  <div class="controls" id="controls"></div>
+
+  <script>
+    const levelData = [
+      [
+        { text: "畫蛇添足", image: "Snake.png" },
+        { text: "井底之蛙", image: "Frog.png" },
+        { text: "對牛彈琴", image: "Cow.png" },
+        { text: "指鹿為馬", image: "Deer.png" }
+      ],
+      [
+        { text: "樹大招風", image: "Tree.png" },
+        { text: "月下老人", image: "Moon.png" },
+        { text: "沐猴而冠", image: "Monkey.png" },
+        { text: "鶴立雞群", image: "Crane.png" }
+      ]
+    ];
+
+    let level = 0;
+    let score = 0;
+    let selectedIdiom = null;
+    const idiomContainer = document.getElementById("idioms");
+    const imageContainer = document.getElementById("images");
+    const scoreDisplay = document.getElementById("score");
+    const messageDisplay = document.getElementById("message");
+    const controls = document.getElementById("controls");
+
+    function loadLevel() {
+      idiomContainer.innerHTML = "";
+      imageContainer.innerHTML = "";
+      messageDisplay.innerText = "";
+      controls.innerHTML = "";
+
+      let idioms = levelData[level];
+
+      idioms.forEach((item, index) => {
+        const idiomCard = document.createElement("div");
+        idiomCard.className = "card";
+        idiomCard.innerText = item.text;
+        idiomCard.onclick = () => {
+          document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+          idiomCard.classList.add("selected");
+          selectedIdiom = index;
+        };
+        idiomContainer.appendChild(idiomCard);
+      });
+
+      idioms
+        .map((item, index) => ({ ...item, index }))
+        .sort(() => Math.random() - 0.5)
+        .forEach(item => {
+          const imageCard = document.createElement("div");
+          imageCard.className = "card";
+          const img = document.createElement("img");
+          img.src = `images/${item.image}`;
+          imageCard.appendChild(img);
+          imageCard.onclick = () => {
+            if (selectedIdiom !== null) {
+              if (selectedIdiom === item.index) {
+                alert("配對正確！");
+                score++;
+                scoreDisplay.innerText = score;
+                imageCard.style.visibility = "hidden";
+                idiomContainer.children[selectedIdiom].style.visibility = "hidden";
+                selectedIdiom = null;
+                document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+
+                if ([...idiomContainer.children].every(c => c.style.visibility === "hidden")) {
+                  setTimeout(() => nextStep(), 500);
+                }
+              } else {
+                alert("錯了，請再試！");
+              }
+            } else {
+              alert("請先選擇一個成語！");
+            }
+          };
+          imageContainer.appendChild(imageCard);
+        });
+    }
+
+    function nextStep() {
+      if (level === 0) {
+        messageDisplay.innerText = "做得好！你完成咗第一關！";
+        const btn = document.createElement("button");
+        btn.innerText = "進入第二關";
+        btn.onclick = () => {
+          level = 1;
+          loadLevel();
+        };
+        controls.innerHTML = "";
+        controls.appendChild(btn);
+      } else {
+        messageDisplay.innerHTML = "你太叻啦！全部完成晒啦！<br><img src='images/trophy.png' width='180'>";
+
+        const restartBtn = document.createElement("button");
+        restartBtn.innerText = "重新開始";
+        restartBtn.onclick = () => {
+          level = 0;
+          score = 0;
+          scoreDisplay.innerText = score;
+          loadLevel();
+        };
+
+        const endBtn = document.createElement("button");
+        endBtn.innerText = "結束遊戲";
+        endBtn.onclick = () => {
+          idiomContainer.innerHTML = "";
+          imageContainer.innerHTML = "";
+          controls.innerHTML = "";
+          messageDisplay.innerText = "感謝遊玩！";
+        };
+
+        controls.innerHTML = "";
+        controls.appendChild(restartBtn);
+        controls.appendChild(endBtn);
+      }
+    }
+
+    loadLevel();
+  </script>
+</body>
+</html>
