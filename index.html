@@ -144,38 +144,43 @@
     }
 
     function nextStep() {
-      if (level === 0) {
-        messageDisplay.innerText = "做得好！你完成咗第一關！";
-        const btn = document.createElement("button");
-        btn.innerText = "進入第二關";
-        btn.onclick = () => {
-          level = 1;
-          loadLevel();
-        };
-        controls.appendChild(btn);
-      } else {
-        messageDisplay.innerText = "你太叻啦！全部完成晒啦！";
-        trophy.style.display = "block";
+  if (level === 0) {
+    messageDisplay.innerText = "做得好！你完成咗第一關！";
+    const btn = document.createElement("button");
+    btn.innerText = "進入第二關";
+    btn.onclick = () => {
+      level = 1;
+      loadLevel();
+    };
+    controls.appendChild(btn);
+  } else {
+    messageDisplay.innerText = "你太叻啦！全部完成晒啦！";
 
-        const restartBtn = document.createElement("button");
-        restartBtn.innerText = "重新開始";
-        restartBtn.onclick = () => {
-          level = 0;
-          score = 0;
-          scoreDisplay.innerText = score;
-          loadLevel();
-        };
+    trophy.style.display = "block";
 
-        const endBtn = document.createElement("button");
-        endBtn.innerText = "結束遊戲";
-        endBtn.onclick = () => {
-          idiomContainer.innerHTML = "";
-          imageContainer.innerHTML = "";
-          controls.innerHTML = "";
-        };
+    const restartBtn = document.createElement("button");
+    restartBtn.innerText = "重新開始";
+    restartBtn.onclick = () => {
+      level = 0;
+      score = 0;
+      scoreDisplay.innerText = score;
+      loadLevel();
+    };
 
-        controls.appendChild(restartBtn);
-        controls.appendChild(endBtn);
+    const endBtn = document.createElement("button");
+    endBtn.innerText = "結束遊戲";
+    endBtn.onclick = () => {
+      idiomContainer.innerHTML = "";
+      imageContainer.innerHTML = "";
+      controls.innerHTML = "";
+      trophy.style.display = "none";
+      messageDisplay.innerText = "感謝遊玩！";
+    };
+
+    controls.appendChild(restartBtn);
+    controls.appendChild(endBtn);
+  }
+}
       }
     }
 
