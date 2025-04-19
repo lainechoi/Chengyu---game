@@ -154,9 +154,7 @@
     };
     controls.appendChild(btn);
   } else {
-    messageDisplay.innerText = "你太叻啦！全部完成晒啦！";
-
-    trophy.style.display = "block";
+    messageDisplay.innerHTML = "你太叻啦！全部完成晒啦！<br><img src='images/trophy.png' width='180'>";
 
     const restartBtn = document.createElement("button");
     restartBtn.innerText = "重新開始";
@@ -173,12 +171,13 @@
       idiomContainer.innerHTML = "";
       imageContainer.innerHTML = "";
       controls.innerHTML = "";
-      trophy.style.display = "none";
       messageDisplay.innerText = "感謝遊玩！";
     };
 
     controls.appendChild(restartBtn);
     controls.appendChild(endBtn);
+  }
+}
   }
 }
       }
